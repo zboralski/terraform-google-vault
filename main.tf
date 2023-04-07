@@ -12,6 +12,14 @@ module "cloud_lb_ip" {
   managed_ssl_certificate_domains = var.lb_domains
 }
 
+resource "google_project_service" "services" {
+  for_each = toset(local.services)
+
+  project = google_project.project.project_id
+  service = each.value
+  disable_on_destroy = false
+}
+
 # Google Cloud Run Service
 resource "google_cloud_run_service" "default" {
   name                       = var.name
@@ -74,6 +82,11 @@ resource "google_cloud_run_service" "default" {
 
 # Extract FQDN from service URL
 locals {
+  services = [
+    "cloudkms.googleapis.com",
+    "compute.googleapis.com",
+    "run.googleapis.com",
+  ]
   hostname = replace(google_cloud_run_service.default.status[0].url, "^https?://([^/]+)/?$", "$1")
 
   # Generate the Vault configuration as a JSON string
@@ -94,7 +107,9 @@ locals {
         }
       },
       "default_lease_ttl" = "168h",
+      "default_max_request_duration" = "90s",
       "max_lease_ttl"     = "720h",
+      "disable_clustering" = "true",
       "disable_mlock"     = "true",
       "listener" = {
         "tcp" = {
