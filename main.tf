@@ -20,6 +20,11 @@ resource "google_project_service" "services" {
   disable_on_destroy = false
 }
 
+data "google_cloud_run_service" "instance" {
+  name     = var.name
+  project  = var.project
+  location = var.location
+}
 
 # Google Cloud Run Service
 resource "google_cloud_run_service" "default" {
