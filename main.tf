@@ -23,7 +23,7 @@ resource "google_project_service" "services" {
 data "google_cloud_run_service" "instance" {
   name     = var.name
   project  = var.project
-  location = var.project.region
+  location = var.location
 }
 
 # Google Cloud Run Service
