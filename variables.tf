@@ -107,4 +107,16 @@ variable "lb_domains" {
   default     = []
 }
 
-variable "domain" {}
+variable "domain" {
+  type       = string
+  description = "Domain name for the Vault UI"
+}
+
+variable "env_secrets" {
+  description = "A map of environment variable names to secret IDs"
+  type        = map(string)
+  default = {
+    # MY_SECRET_1 = "my-secret-id-1"
+    # MY_SECRET_2 = "my-secret-id-2"
+  }
+}
