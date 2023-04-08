@@ -40,7 +40,6 @@ resource "google_cloud_run_service" "default" {
         "autoscaling.knative.dev/maxScale"        = 1 # HA not Supported
         "run.googleapis.com/vpc-access-connector" = var.vpc_connector != "" ? var.vpc_connector : null
         "run.googleapis.com/sandbox"              = "gvisor"
-        "run.googleapis.com/secrets"              = local.run_googleapis_com_secrets
       }
     }
     spec {
