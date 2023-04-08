@@ -23,7 +23,7 @@ resource "google_project_service" "services" {
 data "google_cloud_run_service" "instance" {
   name     = var.name
   project  = var.project
-  location = var.location
+  location = var.project.region
 }
 
 # Google Cloud Run Service
@@ -148,6 +148,10 @@ locals {
 
   # Set the Vault storage bucket name or generate a new one if not provided
   vault_storage_bucket_name = var.vault_storage_bucket_name != "" ? var.vault_storage_bucket_name : "${var.name}-${lower(random_id.vault.hex)}-sb"
+}
+
+resource "random_uuid" "secrets" {
+  for_each = var.env_secrets
 }
 
 locals {
