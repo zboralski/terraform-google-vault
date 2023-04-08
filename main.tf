@@ -15,7 +15,7 @@ module "cloud_lb_ip" {
 resource "google_project_service" "services" {
   for_each = toset(local.services)
 
-  project = var.project.project.project_id
+  project = var.project
   service = each.value
   disable_on_destroy = false
 }
@@ -86,6 +86,8 @@ locals {
     "cloudkms.googleapis.com",
     "compute.googleapis.com",
     "run.googleapis.com",
+    "secretmanager.googleapis.com",
+    "storage.googleapis.com",
   ]
   hostname = replace(google_cloud_run_service.default.status[0].url, "^https?://([^/]+)/?$", "$1")
 
